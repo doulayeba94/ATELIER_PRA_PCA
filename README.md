@@ -231,27 +231,28 @@ Faites preuve de pédagogie et soyez clair dans vos explications et procedures d
 **Exercice 1 :**  
 Quels sont les composants dont la perte entraîne une perte de données ?  
   
-*..Répondez à cet exercice ici..*
+*le PVC étant la source principale qui contient les données persitantes donc perdre le PVC entraine une pertre de données*
 
 **Exercice 2 :**  
 Expliquez nous pourquoi nous n'avons pas perdu les données lors de la supression du PVC pra-data  
   
-*..Répondez à cet exercice ici..*
+*Les données n’ont pas été perdues car un mécanisme de sauvegarde automatique est en place via un CronJob Kubernetes.*
 
 **Exercice 3 :**  
 Quels sont les RTO et RPO de cette solution ?  
   
-*..Répondez à cet exercice ici..*
+*Le RPO dépend de la fréquence des sauvegardes effectuées par le CronJob. Par exemple, si une sauvegarde est réalisée toutes les 5 minutes, le RPO est de 5 minutes (perte maximale de données).
+Le RTO correspond au temps nécessaire pour restaurer l’application et les données, estimé ici entre 2 et 10 minutes, incluant la recréation du PVC et l’exécution du job de restauration*
 
 **Exercice 4 :**  
 Pourquoi cette solution (cet atelier) ne peux pas être utilisé dans un vrai environnement de production ? Que manque-t-il ?   
   
-*..Répondez à cet exercice ici..*
+*Cette solution n’est pas adaptée à un environnement de production car elle repose sur SQLite, qui n’est pas conçu pour des environnements distribués ou à forte charge. De plus, il n’y a pas de réplication des données, ni de haute disponibilité. Le stockage n’est pas redondé et la restauration est manuelle. Il manque également des éléments essentiels comme le monitoring, la gestion des accès sécurisés et une stratégie de sauvegarde externalisée*
   
 **Exercice 5 :**  
 Proposez une archtecture plus robuste.   
   
-*..Répondez à cet exercice ici..*
+*Une architecture plus robuste reposerait sur une base de données relationnelle comme PostgreSQL déployée en haute disponibilité (cluster avec réplication primaire/secondaire). Les données seraient stockées sur des volumes distribués et répliqués (ex : stockage cloud type AWS EBS). Les sauvegardes seraient externalisées (ex : S3) avec des snapshots automatiques. Kubernetes utiliserait des StatefulSets pour gérer la persistance. Enfin, des outils de monitoring (Prometheus, Grafana) et de sécurité (gestion des secrets, IAM) seraient mis en place afin d’assurer la fiabilité, la sécurité et la disponibilité du système.*
 
 ---------------------------------------------------
 Séquence 6 : Ateliers  
